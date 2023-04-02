@@ -1,39 +1,28 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { FederatedTypesPlugin } = require('@module-federation/typescript');
 const { ModuleFederationPlugin } = require('webpack').container;
+
+const pkg = require('./package.json');
 
 const federationConfig = {
     name: 'mfe',
+    library: { type: 'var', name: 'mfe' },
     filename: 'remoteEntry.js',
     exposes: {
         './MFE': './src/App',
     },
-    shared: [
-        /*
-        {
-            react: {
-                singleton: true
-            }
-        },
-        {
-            'react-dom': {
-                singleton: true
-            },
-        }
-        */
-    ],
+    // shared: { react: { singleton: true }, 'react-dom': { singleton: true } },
 };
 
 module.exports = {
     entry: "./src/index.ts",
+    mode: 'development',
     output: {
-        filename: "main.js",
-        path: path.resolve(__dirname, "build"),
+        publicPath: 'auto',
     },
     devServer: {
         static: {
-            directory: path.join(__dirname, "build"),
+            directory: path.join(__dirname, "dist"),
         },
         port: 3001,
     },
@@ -62,7 +51,6 @@ module.exports = {
     },
     plugins: [
         new ModuleFederationPlugin(federationConfig),
-        new FederatedTypesPlugin({ federationConfig: federationConfig }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "public", "index.html"),
         }),

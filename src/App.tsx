@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import Greeting from "./Greeting";
+import MicroComponent from "./MicroComponent";
 
 const App = () => (
-    <Greeting />
+    <MicroComponent />
 );
 
 export default App;
